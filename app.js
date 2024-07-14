@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const os = require('os');
 
 const app = express();
 const port = 3000;
@@ -37,6 +38,14 @@ app.get('/video/:segment', videoRateLimitSegment, (req, res) => {
   res.sendFile(filePath);
 });
 
+// load balancer
+app.get('/', (req, res) => {
+  res.send(
+    `[${new Date().toISOString()}] Received request on ${os.hostname()} from ${
+      req.ip
+    }`
+  );
+});
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
